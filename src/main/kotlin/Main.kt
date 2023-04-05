@@ -14,12 +14,13 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy
 import java.util.EnumSet
 
 private var jda: JDA? = null
-private const val TOKEN = "TOKEN"
 
 fun main(/*args: Array<String>*/) {
     println("Hello World!")
 
-    jda = JDABuilder.createDefault(TOKEN)
+    val token = tokenFile.readText().trim()
+
+    jda = JDABuilder.createDefault(token)
         .setActivity(Activity.listening("interactions"))
         .setStatus(OnlineStatus.ONLINE)
         .setAutoReconnect(true)
