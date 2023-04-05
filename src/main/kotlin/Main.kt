@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy
 import java.util.EnumSet
 
 private var jda: JDA? = null
-private const val TOKEN = "MTAwMDM5MDgyMzI3MzMwNDA2Ng.GAuKK3.kLdsqH2uHvOWCnijWfiJxCHGfAOe6-2eHlcboY"
+private const val TOKEN = "TOKEN"
 
 fun main(/*args: Array<String>*/) {
     println("Hello World!")
