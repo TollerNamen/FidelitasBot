@@ -32,18 +32,7 @@ fun main(/*args: Array<String>*/) {
             GatewayIntent.DIRECT_MESSAGES,GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGE_TYPING,
             GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT)
         .addEventListeners(EventListener())
-        /*
-        .addEventListeners(ReadyListener())
-         */
         .build()
-}
-/*
-class ReadyListener : ListenerAdapter()
-{
-    override fun onReady(event: ReadyEvent) {
-        addSlashCmds("832328391347666964")
-        addSlashCmds("979105761084968960")
-    }
 }
 fun addSlashCmds(id: String) {
     val guild: Guild? = jda?.getGuildById(id)
@@ -59,4 +48,3 @@ fun addSlashCmds(id: String) {
         println("Commands updated successfully")
     }
 }
- */

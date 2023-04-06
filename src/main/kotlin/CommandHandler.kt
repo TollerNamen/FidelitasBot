@@ -18,14 +18,6 @@ val cmds: List<CommandData> = listOf(
                 .addChoice("User", "user")),
     Commands.slash("help", "show what the application is all about")
 )
-class EventListener : ListenerAdapter()
-{
-    override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent)
-    {
-        event.deferReply(false).queue()
-        CommandHandler(event).commandHandler()
-    }
-}
 class CommandHandler(private val event: SlashCommandInteractionEvent) : ListenerAdapter()
 {
     private val commandName: String = event.name
