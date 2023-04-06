@@ -16,8 +16,12 @@ fun help(event: SlashCommandInteractionEvent)
     val embedBuilder = EmbedBuilder()
         .setTitle("Available Commands")
         .setDescription("""
-            • /help
-            • /statistics
+            • **/about**
+              Explanation about a project
+            • **/help**
+              Shows Available Commands
+            • **/statistics**
+              Statistics about a user or the server
         """.trimIndent())
         .setColor(embedColor)
 
