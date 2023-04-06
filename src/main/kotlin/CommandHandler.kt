@@ -1,3 +1,4 @@
+import commands.about
 import commands.help
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -16,7 +17,8 @@ val cmds: List<CommandData> = listOf(
                 true, false)
                 .addChoice("Server", "server")
                 .addChoice("User", "user")),
-    Commands.slash("help", "show what the application is all about")
+    Commands.slash("help", "show all available commands"),
+    Commands.slash("about", "show what the application is all about")
 )
 class CommandHandler(private val event: SlashCommandInteractionEvent) : ListenerAdapter()
 {
@@ -31,6 +33,7 @@ class CommandHandler(private val event: SlashCommandInteractionEvent) : Listener
     {
         when (commandName)
         {
+            "about" -> {about(event)}
             "help" -> {help(event)}
             "statistics" -> {statisticSubCommand()}
             else -> {errorMessage("Error: This Command does not exist in this FidelitasClient")}
@@ -40,7 +43,7 @@ class CommandHandler(private val event: SlashCommandInteractionEvent) : Listener
     {
         when (subCommandName)
         {
-            "user" -> {memberstats()}
+            "user" -> {memberstats(event)}
             "server" -> {}
             else -> {errorMessage("Error: This Subcommand does not seem to exist.")}
         }
