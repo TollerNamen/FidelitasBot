@@ -42,3 +42,50 @@ nbdist/
 ### Mac OS ###
 .DS_Store.idea/
 
+### With the new subdirectory ###
+
+### Gradle ###
+/FidelitasKotlin/.gradle
+/FidelitasKotlin/build/
+!/FidelitasKotlin/gradle/wrapper/gradle-wrapper.jar
+!/FidelitasKotlin/**/src/main/**/build/
+!/FidelitasKotlin/**/src/test/**/build/
+
+### IntelliJ IDEA ###
+/FidelitasKotlin/.idea/modules.xml
+/FidelitasKotlin/.idea/jarRepositories.xml
+/FidelitasKotlin/.idea/compiler.xml
+/FidelitasKotlin/.idea/libraries/
+/FidelitasKotlin/*.iws
+/FidelitasKotlin/*.iml
+/FidelitasKotlin/*.ipr
+/FidelitasKotlin/out/
+!/FidelitasKotlin/**/src/main/**/out/
+!/FidelitasKotlin/**/src/test/**/out/
+/FidelitasKotlin/.idea
+
+### Eclipse ###
+/FidelitasKotlin/.apt_generated
+/FidelitasKotlin/.classpath
+/FidelitasKotlin/.factorypath
+/FidelitasKotlin/.project
+/FidelitasKotlin/.settings
+/FidelitasKotlin/.springBeans
+/FidelitasKotlin/.sts4-cache
+/FidelitasKotlin/bin/
+!/FidelitasKotlin/**/src/main/**/bin/
+!/FidelitasKotlin/**/src/test/**/bin/
+
+### NetBeans ###
+/FidelitasKotlin/nbproject/private/
+/FidelitasKotlin/nbbuild/
+/FidelitasKotlin/dist/
+/FidelitasKotlin/nbdist/
+/FidelitasKotlin/.nb-gradle/
+
+### VS Code ###
+/FidelitasKotlin/.vscode/
+
+### Mac OS ###
+/FidelitasKotlin/.DS_Store.idea/
+
