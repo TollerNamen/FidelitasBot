@@ -21,8 +21,8 @@ fun about(event: SlashCommandInteractionEvent)
             $name originates from the open source Fidelitas project on GitHub.
             
             • [GitHub](https://github.com/TollerNamen/FidelitasBot)
-            • [FidelitasBot Community](https://discord.gg/EcbnGTSMZZ)
-            • [Add FidelitasBot to your Server](https://discord.com/api/oauth2/authorize?client_id=1000390823273304066&permissions=8&scope=bot)
+            • [Community](https://discord.gg/EcbnGTSMZZ)
+            • [Invite](https://discord.com/api/oauth2/authorize?client_id=1000390823273304066&permissions=8&scope=bot)
             
         """.trimIndent())
         .setImage("attachment://image.png")
