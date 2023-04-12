@@ -1,36 +1,50 @@
 package commands
 
 import embedColor
-import imagePreparer
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.utils.FileUpload
-import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
+import java.io.ByteArrayOutputStream
 import java.io.File
+import javax.imageio.ImageIO
 
-fun about(event: SlashCommandInteractionEvent)
-{
+private val baos = ByteArrayOutputStream()
+fun about(event: SlashCommandInteractionEvent) {
     val name = event.jda.selfUser.name
-    val imageBytes = imagePreparer(event.jda.selfUser.effectiveAvatarUrl, name,
-        "A multi purpose open source Discord bot",
-        "background.jpg")
-    val embedBuilder2 = EmbedBuilder()
+    val embedBuilder = EmbedBuilder()
         .setTitle("About $name")
         .setDescription(
             """
             $name originates from the open source Fidelitas project on GitHub.
-            
+
             • [GitHub](https://github.com/TollerNamen/FidelitasBot)
             • [Community](https://discord.gg/EcbnGTSMZZ)
             • [Invite](https://discord.com/api/oauth2/authorize?client_id=1000390823273304066&permissions=8&scope=bot)
-            
-        """.trimIndent())
-        .setImage("attachment://image.png")
+            """.trimIndent()
+        )
+        .setImage("attachment://about.png")
         .setColor(embedColor)
-    val messageCreate: MessageCreateBuilder = MessageCreateBuilder().setEmbeds(embedBuilder2.build())
-    val message = messageCreate.build()
 
-    val file = File("image.png")
-    file.writeBytes(imageBytes)
-    event.hook.sendMessage(message).addFiles(FileUpload.fromData(imageBytes, "image.png")).queue()
+    val file = File("about.png")
+
+    try
+    {
+        val bufferedImage = ImageIO.read(file)
+
+        // Convert the image to a byte array for use as an attachment in the Discord Embed message
+        ImageIO.write(bufferedImage, "png", baos)
+
+        event.hook.sendMessageEmbeds(embedBuilder.build())
+            .addFiles(FileUpload.fromData(baos.toByteArray(), "about.png"))
+            .queue()
+    }
+    catch (e: Exception)
+    {
+        event.hook.sendMessage("Error ${e.message}")
+        e.printStackTrace()
+    }
+    finally
+    {
+        baos.close()
+    }
 }

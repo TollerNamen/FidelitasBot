@@ -1,4 +1,3 @@
-
 import java.awt.*
 import java.awt.geom.RoundRectangle2D
 import java.awt.image.BufferedImage
@@ -6,71 +5,79 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URL
 import javax.imageio.ImageIO
+import kotlin.collections.List
 
-/* archived function
-fun imagePreparer(avatarUrlString: String, title: String, descriptionLine1: String, descriptionLine2: String, descriptionLine3: String): ByteArray {
-    val panelwidth = 1300
-    val panelheight = 300
+data class ImageProperties(val width: Int, val height: Int, val backgroundImagePath: String, val imageTextElements: List<ImageTextElement?>, val imageImageElements: List<ImageImageElement>)
+data class ImageTextElement(val x: Int, val y: Int, val font: Font, val color: Color, val text: String)
+data class ImageImageElement(val x: Int, val y: Int, val color: Color, val borderWidth: Int, val imageWidth: Int, val imageHeight: Int, val resourceUrl: String?, val resourceFilePath: String?)
 
-    // Create a new buffered image using the panel width and height
+fun imageCreator(imageProperties: ImageProperties): ByteArray
+{
+    // ImageSettings
+    val panelwidth = imageProperties.width
+    val panelheight = imageProperties.height
+    val backgroundFile = File(imageProperties.backgroundImagePath)
+
+    // Initializing BackgroundImageFile
+    val backgroundImage = ImageIO.read(backgroundFile)
+
+    // Creating BufferedImage
     val image = BufferedImage(panelwidth, panelheight, BufferedImage.TYPE_INT_ARGB)
 
-    // Get the graphics context for the buffered image
+    // Creating GraphicsInterface
     val g2d = image.createGraphics()
 
-    // Set the background color of the panel
-    g2d.color = Color.BLACK
-    g2d.fillRect(0, 0, panelwidth, panelheight)
+    // Add Background onto the Image
+    g2d.drawImage(backgroundImage, 0, 0, panelwidth, panelheight, null)
 
-    // Load the user's avatar image and create a rounded version of it
-    val avatarImage = prepareAvatar(avatarUrlString)
-    val roundedAvatarImage = createRoundedImage(avatarImage, 250, 250, 5, Color.WHITE)
+    // Drawing ImageTextElements
+    for (imageTextElement in imageProperties.imageTextElements)
+    {
+        g2d.font = imageTextElement?.font
+        g2d.color = imageTextElement?.color
+        imageTextElement?.text?.let { g2d.drawString(it, imageTextElement.x, imageTextElement.y) }
+    }
 
-    // Draw the rounded avatar image to the graphics context
-    g2d.drawImage(roundedAvatarImage, 25, 25, null)
+    // Drawing ImageImageElements
+    var errorImage: Int = 0
+    for (imageImageElement in imageProperties.imageImageElements)
+    {
+        errorImage++
+        if (imageImageElement.resourceUrl != null)
+        {
+            val imageUrl = URL(imageImageElement.resourceUrl)
+            val bufferedImage = ImageIO.read(imageUrl)
+            val roundedImage = createRoundedImage(bufferedImage, imageImageElement.imageWidth, imageImageElement.imageHeight, imageImageElement.borderWidth, imageImageElement.color)
 
-    // archived code
-    //g2d.drawImage(avatarImage, 0, 0, 50, 50, null)
+            g2d.drawImage(roundedImage, imageImageElement.x, imageImageElement.y, null)
+        }
+        else if (imageImageElement.resourceFilePath != null)
+        {
+            val imageFile = File(imageImageElement.resourceFilePath)
+            val bufferedImage = ImageIO.read(imageFile)
+            val roundedImage = createRoundedImage(bufferedImage, imageImageElement.imageWidth, imageImageElement.imageHeight, imageImageElement.borderWidth, imageImageElement.color)
 
-    // Create a new font object for the title label
-    var font = Font("Arial", Font.PLAIN, 70)
-    g2d.font = font
-
-    // Get the FontMetrics object for the current font
-    val fontMetrics = g2d.getFontMetrics(font)
-
-    // Draw the title and description labels
-    g2d.color = Color.WHITE
-    g2d.drawString(title,300 /*panelwidth / 2 - fontMetrics.stringWidth(title) / 2*/, 80)
-
-    // Change the font object for the description label
-    font = Font("Arial", Font.PLAIN, 25)
-    g2d.font = font
-    g2d.drawString(descriptionLine1, 300/*panelwidth / 2 - fontMetrics.stringWidth(description) / 2*/, 110)
-    g2d.drawString(descriptionLine2, 300/*panelwidth / 2 - fontMetrics.stringWidth(description) / 2*/, 140)
-    g2d.drawString(descriptionLine3, 300/*panelwidth / 2 - fontMetrics.stringWidth(description) / 2*/, 170)
-
-    // Clean up the graphics context
-    g2d.dispose()
+            g2d.drawImage(roundedImage, imageImageElement.x, imageImageElement.y, null)
+        }
+        else
+        {
+            println("Missing ImageResource for the image #$errorImage")
+        }
+    }
 
     // Convert the image to a byte array for use as an attachment in the Discord Embed message
     val baos = ByteArrayOutputStream()
     ImageIO.write(image, "png", baos)
-    g2d.dispose()
 
     return baos.toByteArray()
 }
- */
+/* archived code
 fun imagePreparer(
     avatarUrlString: String,
     title: String,
     descriptionLine1: String,
-    /*
-    descriptionLine2: String,
-    descriptionLine3: String,
-    */
-    backgroundFilePath: String
-): ByteArray {
+    backgroundFilePath: String): ByteArray
+{
     val panelwidth = 1300
     val panelheight = 300
 
@@ -92,7 +99,7 @@ fun imagePreparer(
     // g2d.fillRect(0, 0, panelwidth, panelheight)
 
     // Load the user's avatar image and create a rounded version of it
-    val avatarImage = prepareAvatar(avatarUrlString)
+    val avatarImage = prepareImageFromUrl(avatarUrlString)
     val roundedAvatarImage = createRoundedImage(avatarImage, 250, 250, 5, Color.WHITE)
 
     // Draw the rounded avatar image to the graphics context
@@ -129,11 +136,12 @@ fun imagePreparer(
 
     return baos.toByteArray()
 }
-fun prepareAvatar(avatarUrlString: String): BufferedImage {
+fun prepareImageFromUrl(imageUrlString: String): BufferedImage {
     // Load the user's avatar image from the URL
-    val avatarUrl = URL(avatarUrlString)
-    return ImageIO.read(avatarUrl)
+    val imageUrl = URL(imageUrlString)
+    return ImageIO.read(imageUrl)
 }
+ */
 fun createRoundedImage(image: BufferedImage, width: Int, height: Int, borderWidth: Int, borderColor: Color): BufferedImage {
     // create a new image with transparency
     val outputImage = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
