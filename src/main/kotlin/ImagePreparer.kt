@@ -72,7 +72,7 @@ fun imageCreator(imageProperties: ImageProperties): ByteArray
     return baos.toByteArray()
 }
 /* archived code
-fun imagePreparer(
+fun imageAboutCreator(
     avatarUrlString: String,
     title: String,
     descriptionLine1: String,

@@ -8,11 +8,12 @@ fun pyAndJsIntegrater(event: SlashCommandInteractionEvent, fileName: String, arg
 {
     val file = File(fileName)
 
-    val runTimeCmd = when (file.extension) {
+    val runTimeCmd = when (file.extension)
+    {
         "js" -> "node"
         "py" -> "python"
         else -> {
-            println("Error: No file extension specified")
+            println("Error: File extension not accepted right now")
             return
         }
     }

@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 
-private var jda: JDA? = null
+var jda: JDA? = null
 
 fun main(/*args: Array<String>*/) {
     println("Hello World!")
@@ -26,18 +26,4 @@ fun main(/*args: Array<String>*/) {
             GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT)
         .addEventListeners(EventListener())
         .build()
-}
-fun addSlashCmds(id: String) {
-    val guild: Guild? = jda?.getGuildById(id)
-    if (guild == null) {
-        println("Guild not found")
-        return
-    }
-    println("Guild found: ${guild.name}")
-
-    guild.updateCommands {
-        addCommands(cmds)
-    }.queue {
-        println("Commands updated successfully")
-    }
 }
