@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.imageio.ImageIO
 
-private val baos = ByteArrayOutputStream()
+val baos = ByteArrayOutputStream()
 fun about(event: SlashCommandInteractionEvent) {
     val name = event.jda.selfUser.name
     val embedBuilder = EmbedBuilder()
