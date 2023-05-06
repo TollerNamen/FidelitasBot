@@ -42,6 +42,5 @@ val cmds: List<CommandData> = listOf(
             )
         ),
     Commands.slash("help", "show all available commands"),
-    Commands.slash("about", "show what the application is all about"),
-    Commands.slash("pythontest", "test python implementation")
+    Commands.slash("about", "show what the application is all about")
 )
