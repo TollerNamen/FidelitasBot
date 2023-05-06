@@ -1,6 +1,7 @@
 ![picture](https://media.discordapp.net/attachments/979110196372713502/1093517438143967342/image.png)
 
-This is a kotlin project using the JDA-API-Wrapper with the build automation tool gradle. Feel free to commit to the project with your own commands and other implementations. Kotlin is preferred but other languages are allowed or needed. A basic Python and Javscript Integration function  which allows for sending an embed is implemented. Better and more reliable methods to get more Discord-API-Interaction are planned.
+This is discord-bot-project uses a custom gateway-provider with spring-websocket to allow for multiple programs to be interacting with discord at the same time.
+Right now there is only a kotlin-JDA project in the `kotlin` directory, but adding projects using python and javascript (and others).
 
 Links:
  
