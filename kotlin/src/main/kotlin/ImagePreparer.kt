@@ -8,7 +8,7 @@ import javax.imageio.ImageIO
 import kotlin.collections.List
 
 data class ImageProperties(val width: Int, val height: Int, val backgroundImagePath: String, val imageTextElements: List<ImageTextElement?>, val imageImageElements: List<ImageImageElement>)
-data class ImageTextElement(val x: Int, val y: Int, val font: Font, val color: Color, val text: String)
+data class ImageTextElement(val x: Int, val y: Int, val font: Font, val color: Color, val text: String, val maxWidth: Int)
 data class ImageImageElement(val x: Int, val y: Int, val color: Color, val borderWidth: Int, val imageWidth: Int, val imageHeight: Int, val resourceUrl: String?, val resourceFilePath: String?)
 
 fun imageCreator(imageProperties: ImageProperties): ByteArray
@@ -31,11 +31,24 @@ fun imageCreator(imageProperties: ImageProperties): ByteArray
     g2d.drawImage(backgroundImage, 0, 0, panelwidth, panelheight, null)
 
     // Drawing ImageTextElements
-    for (imageTextElement in imageProperties.imageTextElements)
+    if (imageProperties.imageTextElements.isNotEmpty())
     {
-        g2d.font = imageTextElement?.font
-        g2d.color = imageTextElement?.color
-        imageTextElement?.text?.let { g2d.drawString(it, imageTextElement.x, imageTextElement.y) }
+        for (imageTextElement in imageProperties.imageTextElements)
+        {
+            var fontMetrics = g2d.getFontMetrics(imageTextElement?.font)
+            val textWidth = imageTextElement!!.text.let { fontMetrics.stringWidth(it) }
+            g2d.font = imageTextElement.font
+            if (textWidth > imageTextElement.maxWidth)
+            {
+                val scaleFactor = imageTextElement.maxWidth / textWidth
+                val newSize = (g2d.font.size2D * scaleFactor)
+                g2d.font = g2d.font.deriveFont(newSize)
+                fontMetrics = g2d.getFontMetrics(g2d.font)
+                imageTextElement.text.let { fontMetrics.stringWidth(it) }
+            }
+            g2d.color = imageTextElement.color
+            imageTextElement.text.let { g2d.drawString(it, imageTextElement.x, imageTextElement.y) }
+        }
     }
 
     // Drawing ImageImageElements

@@ -2,6 +2,7 @@ import commands.about
 import commands.help
 import commands.pythonTest
 import commands.info.memberstats
+import commands.info.serverInfo
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 class CommandHandler(private val event: SlashCommandInteractionEvent) : ListenerAdapter()
@@ -16,12 +17,13 @@ class CommandHandler(private val event: SlashCommandInteractionEvent) : Listener
         {
             "about" -> {about(event)}
             "help" -> {help(event)}
-            "info" -> {when (subCommandValue){"user" -> {memberstats(event)};"server" -> {};else -> {errorMessage("Error: This Subcommand does not seem to exist.")}}}
+            "info" -> {when (subCommandValue){"user" -> {memberstats(event)};"server" -> {serverInfo(event)};else -> {errorMessage("Error: This Subcommand does not seem to exist.")}}}
             "pythontest" -> {pythonTest(event)}
             else -> {errorMessage("Error: This Command does not exist in this FidelitasClient")}
         }
     }
-    private fun errorMessage(message: String) {
+    private fun errorMessage(message: String)
+    {
         event.hook.sendMessage(message)
     }
 }
