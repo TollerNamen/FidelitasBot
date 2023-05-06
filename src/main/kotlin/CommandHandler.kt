@@ -16,18 +16,9 @@ class CommandHandler(private val event: SlashCommandInteractionEvent) : Listener
         {
             "about" -> {about(event)}
             "help" -> {help(event)}
-            "info" -> {infoSubCommand()}
+            "info" -> {when (subCommandValue){"user" -> {memberstats(event)};"server" -> {};else -> {errorMessage("Error: This Subcommand does not seem to exist.")}}}
             "pythontest" -> {pythonTest(event)}
             else -> {errorMessage("Error: This Command does not exist in this FidelitasClient")}
-        }
-    }
-    private fun infoSubCommand()
-    {
-        when (subCommandValue)
-        {
-            "user" -> {memberstats(event)}
-            "server" -> {}
-            else -> {errorMessage("Error: This Subcommand does not seem to exist.")}
         }
     }
     private fun errorMessage(message: String) {

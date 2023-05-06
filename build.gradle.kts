@@ -1,5 +1,3 @@
-import javax.swing.JFormattedTextField.COMMIT
-
 plugins {
     kotlin("jvm") version "1.8.0"
     application
@@ -18,8 +16,7 @@ dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
     implementation("com.github.minndevelopment:jda-ktx:0.10.0-beta.1")
-    implementation("org.apache.httpcomponents:httpclient:4.5.13")
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    //implementation("com.squareup.okhttp3:okhttp:4.9.3")
 }
 
 tasks.test {
