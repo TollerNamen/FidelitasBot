@@ -42,50 +42,95 @@ nbdist/
 ### Mac OS ###
 .DS_Store.idea/
 
-### With the new subdirectory ###
+### With the new subdirectories ###
 
 ### Gradle ###
-/FidelitasKotlin/.gradle
-/FidelitasKotlin/build/
-!/FidelitasKotlin/gradle/wrapper/gradle-wrapper.jar
-!/FidelitasKotlin/**/src/main/**/build/
-!/FidelitasKotlin/**/src/test/**/build/
+/kotlin/.gradle
+/kotlin/build/
+!/kotlin/gradle/wrapper/gradle-wrapper.jar
+!/kotlin/**/src/main/**/build/
+!/kotlin/**/src/test/**/build/
 
 ### IntelliJ IDEA ###
-/FidelitasKotlin/.idea/modules.xml
-/FidelitasKotlin/.idea/jarRepositories.xml
-/FidelitasKotlin/.idea/compiler.xml
-/FidelitasKotlin/.idea/libraries/
-/FidelitasKotlin/*.iws
-/FidelitasKotlin/*.iml
-/FidelitasKotlin/*.ipr
-/FidelitasKotlin/out/
-!/FidelitasKotlin/**/src/main/**/out/
-!/FidelitasKotlin/**/src/test/**/out/
-/FidelitasKotlin/.idea
+/kotlin/.idea/modules.xml
+/kotlin/.idea/jarRepositories.xml
+/kotlin/.idea/compiler.xml
+/kotlin/.idea/libraries/
+/kotlin/*.iws
+/kotlin/*.iml
+/kotlin/*.ipr
+/kotlin/out/
+!/kotlin/**/src/main/**/out/
+!/kotlin/**/src/test/**/out/
+/kotlin/.idea
 
 ### Eclipse ###
-/FidelitasKotlin/.apt_generated
-/FidelitasKotlin/.classpath
-/FidelitasKotlin/.factorypath
-/FidelitasKotlin/.project
-/FidelitasKotlin/.settings
-/FidelitasKotlin/.springBeans
-/FidelitasKotlin/.sts4-cache
-/FidelitasKotlin/bin/
-!/FidelitasKotlin/**/src/main/**/bin/
-!/FidelitasKotlin/**/src/test/**/bin/
+/kotlin/.apt_generated
+/kotlin/.classpath
+/kotlin/.factorypath
+/kotlin/.project
+/kotlin/.settings
+/kotlin/.springBeans
+/kotlin/.sts4-cache
+/kotlin/bin/
+!/kotlin/**/src/main/**/bin/
+!/kotlin/**/src/test/**/bin/
 
 ### NetBeans ###
-/FidelitasKotlin/nbproject/private/
-/FidelitasKotlin/nbbuild/
-/FidelitasKotlin/dist/
-/FidelitasKotlin/nbdist/
-/FidelitasKotlin/.nb-gradle/
+/kotlin/nbproject/private/
+/kotlin/nbbuild/
+/kotlin/dist/
+/kotlin/nbdist/
+/kotlin/.nb-gradle/
 
 ### VS Code ###
-/FidelitasKotlin/.vscode/
+/kotlin/.vscode/
 
 ### Mac OS ###
-/FidelitasKotlin/.DS_Store.idea/
+/kotlin/.DS_Store.idea/
+
+### Gradle ###
+/gateway-provider/kotlin/.gradle
+/gateway-provider/kotlin/build/
+!/gateway-provider/kotlin/gradle/wrapper/gradle-wrapper.jar
+!/gateway-provider/kotlin/**/src/main/**/build/
+!/gateway-provider/kotlin/**/src/test/**/build/
+
+### IntelliJ IDEA ###
+/gateway-provider/kotlin/.idea/modules.xml
+/gateway-provider/kotlin/.idea/jarRepositories.xml
+/gateway-provider/kotlin/.idea/compiler.xml
+/gateway-provider/kotlin/.idea/libraries/
+/gateway-provider/kotlin/*.iws
+/gateway-provider/kotlin/*.iml
+/gateway-provider/kotlin/*.ipr
+/gateway-provider/kotlin/out/
+!/gateway-provider/kotlin/**/src/main/**/out/
+!/gateway-provider/kotlin/**/src/test/**/out/
+/gateway-provider/kotlin/.idea
+
+### Eclipse ###
+/gateway-provider/kotlin/.apt_generated
+/gateway-provider/kotlin/.classpath
+/gateway-provider/kotlin/.factorypath
+/gateway-provider/kotlin/.project
+/gateway-provider/kotlin/.settings
+/gateway-provider/kotlin/.springBeans
+/gateway-provider/kotlin/.sts4-cache
+/gateway-provider/kotlin/bin/
+!/gateway-provider/kotlin/**/src/main/**/bin/
+!/gateway-provider/kotlin/**/src/test/**/bin/
+
+### NetBeans ###
+/gateway-provider/kotlin/nbproject/private/
+/gateway-provider/kotlin/nbbuild/
+/gateway-provider/kotlin/dist/
+/gateway-provider/kotlin/nbdist/
+/gateway-provider/kotlin/.nb-gradle/
+
+### VS Code ###
+/gateway-provider/kotlin/.vscode/
+
+### Mac OS ###
+/gateway-provider/kotlin/.DS_Store.idea/
 
