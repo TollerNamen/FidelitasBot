@@ -20,13 +20,13 @@ fun serverInfo(event: SlashCommandInteractionEvent)
         val created: String? = guild?.timeCreated?.toLocalDateTime()?.format(formattedDateTime)
 
         val imageTextElementName =
-            guild?.name?.let { ImageTextElement(300, 125, Font("Arial", Font.BOLD, 120), Color.WHITE, it, 975) }
+            guild?.name?.let { ImageTextElement(300, 125, Font("Arial", Font.BOLD, 120), Color.WHITE, it, 975f) }
 
         val imageTextElementTimeCreated =
-            ImageTextElement(300, 200, Font("Arial", Font.BOLD, 45), Color.WHITE, "Time Created: $created", 975)
+            ImageTextElement(300, 200, Font("Arial", Font.BOLD, 45), Color.WHITE, "Time Created: $created", 975f)
 
         val imageTextElementMemberCount =
-            ImageTextElement(300, 275, Font("Arial", Font.BOLD, 45), Color.WHITE, "Member-count: $memberCount", 975)
+            ImageTextElement(300, 275, Font("Arial", Font.BOLD, 45), Color.WHITE, "Member-count: $memberCount", 975f)
 
         val imageImageElement = ImageImageElement(25, 25, Color.WHITE, 5, 250, 250, guild?.iconUrl, null)
 
