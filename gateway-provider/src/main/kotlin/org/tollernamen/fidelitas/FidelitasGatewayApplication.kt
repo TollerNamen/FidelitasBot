@@ -20,8 +20,6 @@ fun main(args: Array<String>)
 		discordGateway.close()
 		chatHandler.closeOnShutDown()
 	})
-	// Keep the main thread alive to receive messages
-	//readlnOrNull()
 
 	runApplication<FidelitasGatewayApplication>(*args)
 }
