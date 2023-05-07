@@ -8,7 +8,7 @@ import javax.imageio.ImageIO
 import kotlin.collections.List
 
 data class ImageProperties(val width: Int, val height: Int, val backgroundImagePath: String, val imageTextElements: List<ImageTextElement?>, val imageImageElements: List<ImageImageElement>)
-data class ImageTextElement(val x: Int, val y: Int, val font: Font, val color: Color, val text: String, val maxWidth: Int)
+data class ImageTextElement(val x: Int, val y: Int, val font: Font, val color: Color, val text: String, val maxWidth: Float)
 data class ImageImageElement(val x: Int, val y: Int, val color: Color, val borderWidth: Int, val imageWidth: Int, val imageHeight: Int, val resourceUrl: String?, val resourceFilePath: String?)
 
 fun imageCreator(imageProperties: ImageProperties): ByteArray
@@ -41,7 +41,7 @@ fun imageCreator(imageProperties: ImageProperties): ByteArray
             if (textWidth > imageTextElement.maxWidth)
             {
                 val scaleFactor = imageTextElement.maxWidth / textWidth
-                val newSize = (g2d.font.size2D * scaleFactor)
+                val newSize = (g2d.font.size2D * scaleFactor).toFloat()
                 g2d.font = g2d.font.deriveFont(newSize)
                 fontMetrics = g2d.getFontMetrics(g2d.font)
                 imageTextElement.text.let { fontMetrics.stringWidth(it) }

@@ -22,13 +22,13 @@ fun memberstats(event: SlashCommandInteractionEvent)
         val joined: String? = member?.timeJoined?.toLocalDateTime()?.format(formattedDateTime)
 
         val imageTextElementName =
-            member?.user?.name?.let { ImageTextElement(300, 125, Font("Arial", Font.BOLD, 120), Color.WHITE, it, 975) }
+            member?.user?.name?.let { ImageTextElement(300, 125, Font("Arial", Font.BOLD, 120), Color.WHITE, it, 975.0f) }
 
         val imageTextElementJoined =
-            ImageTextElement(300, 200, Font("Arial", Font.BOLD, 45), Color.WHITE, "Has Joined: $joined", 975)
+            ImageTextElement(300, 200, Font("Arial", Font.BOLD, 45), Color.WHITE, "Has Joined: $joined", 975.0f)
 
         val imageTextElementHighestRoleName =
-            ImageTextElement(300, 275, Font("Arial", Font.BOLD, 45), Color.WHITE, "Highest Role: $highestRoleName", 975)
+            ImageTextElement(300, 275, Font("Arial", Font.BOLD, 45), Color.WHITE, "Highest Role: $highestRoleName", 975f)
 
         val imageImageElement = ImageImageElement(25, 25, Color.WHITE, 5, 250, 250, member?.effectiveAvatarUrl, null)
 
