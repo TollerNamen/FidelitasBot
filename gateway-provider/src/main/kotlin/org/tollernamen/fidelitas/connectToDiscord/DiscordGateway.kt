@@ -271,6 +271,7 @@ fun scheduleReconnect()
         timer.schedule(delay)
         {
             startNewSession()
+            println("Reconnecting in $delay")
         }
         delay *= 2
     }
