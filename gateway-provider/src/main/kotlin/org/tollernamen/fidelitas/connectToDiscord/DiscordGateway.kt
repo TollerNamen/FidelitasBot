@@ -7,6 +7,7 @@ import org.tollernamen.fidelitas.discordGateway
 import org.tollernamen.fidelitas.token
 import org.tollernamen.fidelitas.websocketserver.chatHandler
 import java.util.*
+import kotlin.concurrent.schedule
 
 val gson = Gson()
 
@@ -196,7 +197,8 @@ fun checkHeartBeatAckReceived(interval: Int)
             if (!heartbeatAckReceived)
             {
                 println("HEARTBEAT_ACK not received, reconnecting...")
-                reconnect()
+                //reconnect()
+                scheduleReconnect()
             }
         }
     }, heartbeatCheckInterval)
@@ -258,6 +260,20 @@ fun startNewSession()
 
     // Establish a new connection
     discordGateway.connect(listener)
+}
+fun scheduleReconnect()
+{
+    var delay = 2000L
+    val maxDelay = 64000L
+    val timer = Timer()
+    while (delay <= maxDelay)
+    {
+        timer.schedule(delay)
+        {
+            startNewSession()
+        }
+        delay *= 2
+    }
 }
 fun sendJsonToDiscord(jsonString: String)
 {
