@@ -17,7 +17,7 @@ const val os = "Linux"
 const val browser = "Firefox"
 
 var sessionId: String? = null
-
+var connectionExists: Boolean = false
 var readyPayLoad: JsonObject? = null
 var guildCreatePayLoadList: MutableList<JsonObject>? = mutableListOf()
 
@@ -26,10 +26,12 @@ val listener = object : WebSocketListener()
     override fun onOpen(webSocket: WebSocket, response: Response)
     {
         println("Connected to Discord Gateway")
+        connectionExists = true
     }
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String)
     {
         println("Closing connection: $reason")
+        connectionExists = false
     }
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?)
     {
@@ -197,7 +199,6 @@ fun checkHeartBeatAckReceived(interval: Int)
             if (!heartbeatAckReceived)
             {
                 println("HEARTBEAT_ACK not received, reconnecting...")
-                //reconnect()
                 scheduleReconnect()
             }
         }
@@ -263,17 +264,17 @@ fun startNewSession()
 }
 fun scheduleReconnect()
 {
-    var delay = 2000L
-    val maxDelay = 64000L
+    var delayMilliseconds = 2000L
+    val maxDelayMilliseconds = 64000L
     val timer = Timer()
-    while (delay <= maxDelay)
+    while (delayMilliseconds <= maxDelayMilliseconds && !connectionExists)
     {
-        timer.schedule(delay)
+        timer.schedule(delayMilliseconds)
         {
             startNewSession()
-            println("Reconnecting in $delay")
+            println("Reconnecting in $delayMilliseconds")
         }
-        delay *= 2
+        delayMilliseconds *= 2
     }
 }
 fun sendJsonToDiscord(jsonString: String)
