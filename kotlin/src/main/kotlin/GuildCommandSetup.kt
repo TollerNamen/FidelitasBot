@@ -17,18 +17,17 @@ fun addSlashCmds(id: String, sendMessage: Boolean, event: ButtonInteractionEvent
     println("Guild found: ${guild.name}")
 
     guild.updateCommands {
-        addCommands(cmds)
-    }.queue {
+        addCommands(commandData)
+    }
+        .queue {
         when (sendMessage)
         {
-            true -> {
-                event?.hook?.sendMessage("Commands updated successfully!")?.queue()
-            }
-            else -> {println("Commands updated successfully")}
+            true -> event?.hook?.sendMessage("Commands updated successfully!")?.queue()
+            else -> println("Commands updated successfully")
         }
     }
 }
-val cmds: List<CommandData> = listOf(
+val commandData: List<CommandData> = listOf(
     Commands.slash("info", "show statistics")
         .addOptions(
             OptionData(

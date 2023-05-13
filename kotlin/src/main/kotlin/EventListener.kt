@@ -6,13 +6,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.interactions.components.ActionRow
 import net.dv8tion.jda.api.interactions.components.buttons.Button
 
-
 class EventListener : ListenerAdapter()
 {
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent)
     {
         event.deferReply(false).queue()
-        CommandHandler(event).commandHandler()
+        AssignHandlersToInteraction(event)
     }
     override fun onMessageReceived(event: MessageReceivedEvent)
     {
@@ -23,10 +22,9 @@ class EventListener : ListenerAdapter()
             println("message acknowledged")
             event.channel.sendMessage("Add all SlashCommands to your Server!").addActionRow(Button.success("addSlashCmds", "Add SlashCommands to Server")).queue()
         }
-
     }
     override fun onButtonInteraction(event: ButtonInteractionEvent) {
-        if (event.button.id=="addSlashCmds")
+        if (event.button.id == "addSlashCmds")
         {
             event.deferReply().queue()
             event.guild?.let { addSlashCmds(it.id, true, event) }

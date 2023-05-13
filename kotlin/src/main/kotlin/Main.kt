@@ -1,14 +1,11 @@
-import dev.minn.jda.ktx.interactions.commands.updateCommands
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
-import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.SessionControllerAdapter
-import net.dv8tion.jda.internal.JDAImpl.LOG
 
 var jda: JDA? = null
 
@@ -18,7 +15,7 @@ fun main(/*args: Array<String>*/)
 
     val token = tokenFile.readText().trim()
 
-    var sessionController = CustomSessionController()
+    val sessionController = CustomSessionController()
 
     jda = JDABuilder.createDefault(token)
         .setActivity(Activity.listening("interactions"))
@@ -37,7 +34,7 @@ fun main(/*args: Array<String>*/)
 }
 class CustomSessionController : SessionControllerAdapter()
 {
-    final val customGatewayUrl = "ws://localhost:3000/fidelitas/gate"
+    private val customGatewayUrl = "ws://localhost:3000/fidelitas/gate"
     override fun getGateway(): String
     {
         return customGatewayUrl
