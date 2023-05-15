@@ -3,7 +3,9 @@ package commands
 import CommandHandler
 import embedColor
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
 import net.dv8tion.jda.api.utils.FileUpload
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -24,10 +26,18 @@ class AboutCommandHandler : CommandHandler
             • [GitHub](https://github.com/TollerNamen/FidelitasBot)
             • [Community](https://discord.gg/EcbnGTSMZZ)
             • [Invite](https://discord.com/api/oauth2/authorize?client_id=1000390823273304066&permissions=8&scope=bot)
+            
+            [Report an issue to the project](https://github.com/TollerNamen/FidelitasBot/issues)
             """.trimIndent()
             )
             .setImage("attachment://about.png")
             .setColor(embedColor)
+
+        val browseMenu = StringSelectMenu.create("commandBrowser")
+            .setPlaceholder("Browse Commands")
+            .addOption("General", "help_general", Emoji.fromFormatted("\uD83D\uDD30"))
+            .addOption("About", "help_about", Emoji.fromFormatted("ℹ\uFE0F"))
+            .setRequiredRange(1, 1)
 
         val file = File("about.png")
 
@@ -35,11 +45,11 @@ class AboutCommandHandler : CommandHandler
         {
             val bufferedImage = ImageIO.read(file)
 
-            // Convert the image to a byte array for use as an attachment in the Discord Embed message
             ImageIO.write(bufferedImage, "png", baos)
 
             event.hook.sendMessageEmbeds(embedBuilder.build())
                 .addFiles(FileUpload.fromData(baos.toByteArray(), "about.png"))
+                .addActionRow(browseMenu.build())
                 .queue()
         }
         catch (e: Exception)

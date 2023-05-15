@@ -1,33 +1,55 @@
 package commands
 
 import CommandHandler
+import commandData
 import embedColor
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
 
 class HelpCommandHandler : CommandHandler
 {
     override fun handle(event: SlashCommandInteractionEvent)
     {
-        val embedBuilder = EmbedBuilder()
-            .setTitle("Help")
-            .setColor(embedColor)
+        description(event)
+        { result ->
+            val embedBuilder = EmbedBuilder()
+                .setTitle("Help")
+                .setColor(embedColor)
+                .setDescription(result)
 
-        event.guild?.retrieveCommands()?.queue{
-            if (it.isEmpty())
+            println(result)
+
+            event.hook.sendMessageEmbeds(embedBuilder.build()).queue()
+        }
+    }
+    fun description(event: SlashCommandInteractionEvent, callback: (String) -> Unit)
+    {
+        event.guild?.retrieveCommands()?.queue({ commands ->
+            if (commands.isEmpty())
             {
-                embedBuilder.setDescription("There are no slash commands available in this guild. To add commands, send a message mentioning ${event.jda.selfUser.asTag} and saying \"setup\" (not case sensitive)")
+                callback("There are no slash commands available in this guild. To add commands, send a message mentioning ${event.jda.selfUser.asTag} and saying \"setup\" (not case sensitive)")
             }
             else
             {
-                embedBuilder.setDescription(it.joinToString(separator = "\n") { command ->
-                    val commandMention = command.asMention
-                    val commandDescription = command.description
-                    "• $commandMention\n  $commandDescription"
+                val description = StringBuilder()
+                val allowedCommands = commands
+                    .filter{ command ->
+                    commandData
+                        .any{
+                        command.name == it.name
+                    }
                 }
-                )
+                for (command in allowedCommands)
+                {
+                    description.append("${command.asMention}\n ${command.description} \n")
+                }
+                callback(description.toString())
             }
-        }
-        event.hook.sendMessageEmbeds(embedBuilder.build()).queue()
+        }, {
+            callback("Failed to retrieve commands.")
+        })
     }
+
 }

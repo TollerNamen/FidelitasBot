@@ -16,6 +16,15 @@ fun addSlashCmds(id: String, sendMessage: Boolean, event: ButtonInteractionEvent
     }
     println("Guild found: ${guild.name}")
 
+    /*
+    val commandId = "1095810027048140831"
+
+    guild.deleteCommandById(commandId).queue(
+        { println("Command deleted successfully.") },
+        { error -> println("Failed to delete command: ${error.message}") }
+    )
+     */
+
     guild.updateCommands {
         addCommands(commandData)
     }
@@ -40,6 +49,5 @@ val commandData: List<CommandData> = listOf(
                 OptionType.USER, "user", "pick a another user instead of yourself"
             )
         ),
-    Commands.slash("help", "show all available commands"),
-    Commands.slash("about", "show what the application is all about")
+    Commands.slash("help", "show all available commands")
 )

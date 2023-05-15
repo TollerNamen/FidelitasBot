@@ -7,7 +7,7 @@ class AssignHandlersToInteraction(event: SlashCommandInteractionEvent)
 {
     private val commandName: String = event.name
     private val commandHandlers: MutableMap<String, CommandHandler> = mutableMapOf(
-        "help" to HelpCommandHandler(),
+        "help" to AboutCommandHandler(),
         "about" to AboutCommandHandler(),
         "info" to InfoCommandHandler()
     )
