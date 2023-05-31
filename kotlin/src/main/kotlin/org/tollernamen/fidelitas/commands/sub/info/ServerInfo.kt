@@ -1,13 +1,13 @@
-package commands.infoSubCommands
+package org.tollernamen.fidelitas.commands.sub.info
 
-import ImageImageElement
-import ImageProperties
-import ImageTextElement
-import SubCommandHandler
-import imageCreator
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.utils.FileUpload
+import org.tollernamen.fidelitas.*
+import org.tollernamen.fidelitas.misc.ImageImageElement
+import org.tollernamen.fidelitas.misc.ImageProperties
+import org.tollernamen.fidelitas.misc.ImageTextElement
+import org.tollernamen.fidelitas.misc.imageCreator
 import java.awt.Color
 import java.awt.Font
 import java.time.format.DateTimeFormatter

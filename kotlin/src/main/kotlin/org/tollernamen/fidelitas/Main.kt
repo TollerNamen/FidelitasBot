@@ -1,3 +1,9 @@
+package org.tollernamen.fidelitas
+
+import org.tollernamen.fidelitas.listeners.ButtonInteraction
+import org.tollernamen.fidelitas.listeners.MessageReceived
+import org.tollernamen.fidelitas.listeners.Ready
+import org.tollernamen.fidelitas.listeners.StringSelectMenuInteraction
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
@@ -27,7 +33,7 @@ fun main(/*args: Array<String>*/)
             GatewayIntent.DIRECT_MESSAGES,GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGE_TYPING,
             GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT)
         .setSessionController(sessionController)
-        .addEventListeners(EventListener())
+        .addEventListeners(SlashCommandListener(), ButtonInteraction(), MessageReceived(), StringSelectMenuInteraction(), Ready())
         .build()
 
     println(sessionController.gateway)

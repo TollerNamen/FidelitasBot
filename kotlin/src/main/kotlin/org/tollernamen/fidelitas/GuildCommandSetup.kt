@@ -1,3 +1,5 @@
+package org.tollernamen.fidelitas
+
 import dev.minn.jda.ktx.interactions.commands.updateCommands
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent

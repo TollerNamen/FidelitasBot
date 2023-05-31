@@ -1,3 +1,5 @@
+package org.tollernamen.fidelitas.misc
+
 import java.awt.*
 import java.awt.geom.RoundRectangle2D
 import java.awt.image.BufferedImage

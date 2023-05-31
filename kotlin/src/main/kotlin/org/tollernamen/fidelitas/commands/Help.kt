@@ -1,12 +1,10 @@
-package commands
+package org.tollernamen.fidelitas.commands
 
-import CommandHandler
-import commandData
-import embedColor
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
-import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
+import org.tollernamen.fidelitas.CommandHandler
+import org.tollernamen.fidelitas.commandData
+import org.tollernamen.fidelitas.defaultEmbedColor
 
 class HelpCommandHandler : CommandHandler
 {
@@ -16,7 +14,7 @@ class HelpCommandHandler : CommandHandler
         { result ->
             val embedBuilder = EmbedBuilder()
                 .setTitle("Help")
-                .setColor(embedColor)
+                .setColor(defaultEmbedColor)
                 .setDescription(result)
 
             println(result)

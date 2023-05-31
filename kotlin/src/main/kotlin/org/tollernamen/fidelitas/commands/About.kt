@@ -1,17 +1,13 @@
-package commands
+package org.tollernamen.fidelitas.commands
 
-import CommandHandler
-import embedColor
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
-import net.dv8tion.jda.api.utils.FileUpload
-import java.io.ByteArrayOutputStream
-import java.io.File
-import javax.imageio.ImageIO
+import org.tollernamen.fidelitas.CommandHandler
+import org.tollernamen.fidelitas.aboutImageUrl
+import org.tollernamen.fidelitas.defaultEmbedColor
 
-val baos = ByteArrayOutputStream()
 class AboutCommandHandler : CommandHandler
 {
     override fun handle(event: SlashCommandInteractionEvent)
@@ -30,8 +26,8 @@ class AboutCommandHandler : CommandHandler
             [Report an issue to the project](https://github.com/TollerNamen/FidelitasBot/issues)
             """.trimIndent()
             )
-            .setImage("attachment://about.png")
-            .setColor(embedColor)
+            .setImage(aboutImageUrl)
+            .setColor(defaultEmbedColor)
 
         val browseMenu = StringSelectMenu.create("commandBrowser")
             .setPlaceholder("Browse Commands")
@@ -39,27 +35,8 @@ class AboutCommandHandler : CommandHandler
             .addOption("About", "help_about", Emoji.fromFormatted("ℹ\uFE0F"))
             .setRequiredRange(1, 1)
 
-        val file = File("about.png")
-
-        try
-        {
-            val bufferedImage = ImageIO.read(file)
-
-            ImageIO.write(bufferedImage, "png", baos)
-
-            event.hook.sendMessageEmbeds(embedBuilder.build())
-                .addFiles(FileUpload.fromData(baos.toByteArray(), "about.png"))
-                .addActionRow(browseMenu.build())
-                .queue()
-        }
-        catch (e: Exception)
-        {
-            event.hook.sendMessage("Error ${e.message}")
-            e.printStackTrace()
-        }
-        finally
-        {
-            baos.close()
-        }
+        event.hook.sendMessageEmbeds(embedBuilder.build())
+            .addActionRow(browseMenu.build())
+            .queue()
     }
 }
