@@ -4,16 +4,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.tollernamen.fidelitas.connectToDiscord.DiscordGateway
 import org.tollernamen.fidelitas.connectToDiscord.listener
+import org.tollernamen.fidelitas.connectToDiscord.standardGatewayUrl
 import org.tollernamen.fidelitas.websocketserver.chatHandler
 
-val discordGateway = DiscordGateway("wss://gateway.discord.gg/?v=8&encoding=json")
+val discordGateway = DiscordGateway(standardGatewayUrl, listener)
 
 @SpringBootApplication
 class FidelitasGatewayApplication
 
 fun main(args: Array<String>)
 {
-	discordGateway.connect(listener)
+	discordGateway.connect()
 
 	// Add a shutdown hook to gracefully close the connection
 	Runtime.getRuntime().addShutdownHook(Thread {

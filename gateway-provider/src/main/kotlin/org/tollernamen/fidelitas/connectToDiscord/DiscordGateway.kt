@@ -7,7 +7,6 @@ import org.tollernamen.fidelitas.discordGateway
 import org.tollernamen.fidelitas.token
 import org.tollernamen.fidelitas.websocketserver.chatHandler
 import java.util.*
-import kotlin.concurrent.schedule
 
 val gson = Gson()
 
@@ -21,6 +20,9 @@ var connectionExists: Boolean = false
 var readyPayLoad: JsonObject? = null
 var guildCreatePayLoadList: MutableList<JsonObject>? = mutableListOf()
 
+const val standardGatewayUrl = "wss://gateway.discord.gg/?v=8&encoding=json"
+lateinit var resumeGatewayUrl: String
+
 val listener = object : WebSocketListener()
 {
     override fun onOpen(webSocket: WebSocket, response: Response)
@@ -32,10 +34,22 @@ val listener = object : WebSocketListener()
     {
         println("Closing connection: $reason")
         connectionExists = false
+        if (code == 4000
+            || code == 4001
+            || code == 4002
+            || code == 4003
+            || code == 4005
+            || code == 4007
+            || code == 4008
+            || code == 4009)
+        {
+            reconnect()
+        }
     }
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?)
     {
-        println("Error: ${t.localizedMessage}")
+        //println("Error: ${t.localizedMessage}")
+        t.printStackTrace()
     }
     override fun onMessage(webSocket: WebSocket, text: String)
     {
@@ -82,6 +96,12 @@ fun reconnect()
             "seq" to lastSequenceNumber
         )
     )
+    if (connectionExists)
+    {
+        discordGateway.close()
+    }
+    discordGateway.gatewayUrl = resumeGatewayUrl
+    discordGateway.connect()
     discordGateway.sendMessage(gson.toJson(resumePayload))
 }
 fun handleDispatch(jsonObject: JsonObject)
@@ -96,6 +116,7 @@ fun handleDispatch(jsonObject: JsonObject)
     {
         "READY" -> {
             sessionId = data["session_id"].asString
+            resumeGatewayUrl = data["resume_gateway_url"].asString
             readyPayLoad = jsonObject
         }
         "GUILD_CREATE" -> {
@@ -188,6 +209,15 @@ fun startHeartbeat(interval: Int)
         }
     }, interval.toLong(), interval.toLong())
 }
+fun sendHeartbeat()
+{
+    val heartbeatPayload = JsonObject().apply {
+        addProperty("op", Opcode.HEARTBEAT.code)
+        add("d", if (lastSequenceNumber != null) gson.toJsonTree(lastSequenceNumber) else null)
+    }
+    discordGateway.sendMessage(heartbeatPayload.toString())
+    println("Sent HEARTBEAT with sequence number: $lastSequenceNumber")
+}
 fun checkHeartBeatAckReceived(interval: Int)
 {
     val heartbeatCheckInterval = interval.toLong() + 5000
@@ -204,23 +234,14 @@ fun checkHeartBeatAckReceived(interval: Int)
         }
     }, heartbeatCheckInterval)
 }
-fun sendHeartbeat()
-{
-    val heartbeatPayload = JsonObject().apply {
-        addProperty("op", Opcode.HEARTBEAT.code)
-        add("d", if (lastSequenceNumber != null) gson.toJsonTree(lastSequenceNumber) else null)
-    }
-    discordGateway.sendMessage(heartbeatPayload.toString())
-    println("Sent HEARTBEAT with sequence number: $lastSequenceNumber")
-}
-data class DiscordGateway (var gatewayUrl: String)
+data class DiscordGateway (var gatewayUrl: String, val listener: WebSocketListener)
 {
     private val client = OkHttpClient()
-    private val request = Request.Builder().url(gatewayUrl).build()
     private lateinit var discordWebSocket: WebSocket
 
-    fun connect(listener: WebSocketListener)
+    fun connect()
     {
+        val request = Request.Builder().url(gatewayUrl).build()
         discordWebSocket = client.newWebSocket(request, listener)
     }
     fun close()
@@ -256,25 +277,30 @@ enum class Opcode(val code: Int)
 }
 fun startNewSession()
 {
-    // Close the existing connection (if any)
     discordGateway.close()
 
-    // Establish a new connection
-    discordGateway.connect(listener)
+    discordGateway.connect()
 }
 fun scheduleReconnect()
 {
     var delayMilliseconds = 2000L
     val maxDelayMilliseconds = 64000L
     val timer = Timer()
-    while (delayMilliseconds <= maxDelayMilliseconds && !connectionExists)
+    while (!connectionExists)
     {
-        timer.schedule(delayMilliseconds)
+        timer.schedule(object : TimerTask()
         {
-            startNewSession()
-            println("Reconnecting in $delayMilliseconds")
-        }
+            override fun run()
+            {
+                startNewSession()
+                println("Reconnecting in $delayMilliseconds")
+            }
+        }, delayMilliseconds)
         delayMilliseconds *= 2
+        if (delayMilliseconds >= maxDelayMilliseconds)
+        {
+            delayMilliseconds = maxDelayMilliseconds
+        }
     }
 }
 fun sendJsonToDiscord(jsonString: String)
