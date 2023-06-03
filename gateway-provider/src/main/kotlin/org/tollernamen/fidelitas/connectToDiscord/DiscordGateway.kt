@@ -7,6 +7,7 @@ import org.tollernamen.fidelitas.discordGateway
 import org.tollernamen.fidelitas.token
 import org.tollernamen.fidelitas.websocketserver.chatHandler
 import java.util.*
+import kotlin.system.exitProcess
 
 val gson = Gson()
 
@@ -17,8 +18,8 @@ const val browser = "Firefox"
 
 var sessionId: String? = null
 var connectionExists: Boolean = false
-var readyPayLoad: JsonObject? = null
-var guildCreatePayLoadList: MutableList<JsonObject>? = mutableListOf()
+lateinit var readyPayLoad: JsonObject
+var guildCreatePayLoadList: MutableList<JsonObject> = mutableListOf()
 
 const val standardGatewayUrl = "wss://gateway.discord.gg/?v=8&encoding=json"
 lateinit var resumeGatewayUrl: String
@@ -120,7 +121,7 @@ fun handleDispatch(jsonObject: JsonObject)
             readyPayLoad = jsonObject
         }
         "GUILD_CREATE" -> {
-            guildCreatePayLoadList?.add(jsonObject)
+            guildCreatePayLoadList.add(jsonObject)
         }
         else -> chatHandler.sendDispatch(jsonObject)
     }
@@ -132,7 +133,7 @@ fun handleHeartbeatAck(jsonObject: JsonObject)
 }
 fun handleHello(jsonObject: JsonObject)
 {
-    val heartbeatInterval = jsonObject["d"].asJsonObject["heartbeat_interval"].asInt  //.getJSONObject("d").getInt("heartbeat_interval")
+    val heartbeatInterval = jsonObject["d"].asJsonObject["heartbeat_interval"].asInt
     println("Received HELLO with heartbeat interval: $heartbeatInterval")
 
     /*
@@ -203,9 +204,14 @@ fun startHeartbeat(interval: Int)
     {
         override fun run()
         {
+            if (!connectionExists)
+            {
+                exitProcess(0)
+            }
             sendHeartbeat()
             heartbeatAckReceived = false
             checkHeartBeatAckReceived(interval)
+
         }
     }, interval.toLong(), interval.toLong())
 }
@@ -228,7 +234,7 @@ fun checkHeartBeatAckReceived(interval: Int)
         {
             if (!heartbeatAckReceived)
             {
-                println("HEARTBEAT_ACK not received, reconnecting...")
+                println("Missing Heartbeat, reconnecting...")
                 scheduleReconnect()
             }
         }
@@ -293,7 +299,8 @@ fun scheduleReconnect()
             override fun run()
             {
                 startNewSession()
-                println("Reconnecting in $delayMilliseconds")
+                println("Reconnecting in ${delayMilliseconds}s")
+                exitProcess(0)
             }
         }, delayMilliseconds)
         delayMilliseconds *= 2

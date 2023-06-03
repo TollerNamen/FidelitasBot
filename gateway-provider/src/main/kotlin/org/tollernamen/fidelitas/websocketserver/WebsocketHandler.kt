@@ -97,9 +97,9 @@ fun handleIdentifyAndSendReady(session: WebSocketSession, jsonObject: JsonObject
         session.sendMessage(TextMessage(readyPayLoad.toString()))
         println("WebsocketServer: Sent ReadyPayload to Session: ${session.id}")
         println("WebsocketServer: Sending GuildCreatePayloadList to Session: ${session.id}")
-        for (guildcreatePayLoad in guildCreatePayLoadList!!)
+        for (guildCreatePayLoad in guildCreatePayLoadList)
         {
-            session.sendMessage(TextMessage(guildcreatePayLoad.toString()))
+            session.sendMessage(TextMessage(guildCreatePayLoad.toString()))
         }
         println("WebsocketServer: Sent GuildCreatePayloadList to Session: ${session.id}")
     }
