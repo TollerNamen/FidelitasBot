@@ -12,17 +12,17 @@ import org.tollernamen.fidelitas.connectToDiscord.Opcode
 import org.tollernamen.fidelitas.connectToDiscord.guildCreatePayLoadList
 import org.tollernamen.fidelitas.connectToDiscord.readyPayLoad
 import org.tollernamen.fidelitas.connectToDiscord.sendJsonToDiscord
-import org.tollernamen.fidelitas.token
+import org.tollernamen.fidelitas.appconfig.token
+import org.tollernamen.fidelitas.appconfig.printWebSocketConfig
 import java.util.concurrent.ConcurrentHashMap
 
 class ChatHandler : TextWebSocketHandler()
 {
     private val sessions = ConcurrentHashMap<String, WebSocketSession>()
-
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage)
     {
-        println("WebsocketServer: New TextMessage from Session: ${session.id}")
-        println("WebsocketServer: Message: ${message.payload}")
+        printWebSocketConfig("WebsocketServer: New TextMessage from Session: ${session.id}")
+        printWebSocketConfig("WebsocketServer: Message: ${message.payload}")
         val jsonString = message.payload
         val jsonObject = JsonParser.parseString(jsonString).asJsonObject
 
@@ -33,23 +33,23 @@ class ChatHandler : TextWebSocketHandler()
             Opcode.REQUEST_GUILD_MEMBERS -> sendJsonToDiscord(jsonString)
             Opcode.VOICE_STATE_UPDATE -> sendJsonToDiscord(jsonString)
             Opcode.STATUS_UPDATE -> sendJsonToDiscord(jsonString)
-            else -> println("Unhandled opcode: $opcode")
+            else -> printWebSocketConfig("Unhandled opcode: $opcode")
         }
     }
     override fun afterConnectionEstablished(session: WebSocketSession)
     {
         sessions[session.id] = session
-        println("WebsocketServer: New Connection Established, Session: ${session.id}")
+        printWebSocketConfig("WebsocketServer: New Connection Established, Session: ${session.id}")
         sendHello(session)
     }
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus)
     {
         sessions.remove(session.id)
-        println("WebsocketServer: Connection closed, Session: ${session.id}")
+        printWebSocketConfig("WebsocketServer: Connection closed, Session: ${session.id}")
     }
     fun sendDispatch(jsonObject: JsonObject)
     {
-        println("WebsocketServer: Sending Dispatch of type \"${jsonObject["t"].asString}\"")
+        printWebSocketConfig("WebsocketServer: Sending Dispatch of type \"${jsonObject["t"].asString}\"")
         val textMessage = TextMessage(jsonObject.toString())
         for ((_, session) in sessions)
         {
@@ -58,7 +58,7 @@ class ChatHandler : TextWebSocketHandler()
                 session.sendMessage(textMessage)
             }
         }
-        println("WebsocketServer: Dispatch sent!")
+        printWebSocketConfig("WebsocketServer: Dispatch sent!")
     }
     // See Main Method for execution of this function
     fun closeOnShutDown()
@@ -93,15 +93,15 @@ fun handleIdentifyAndSendReady(session: WebSocketSession, jsonObject: JsonObject
     }
     else
     {
-        println("WebsocketServer: Sending ReadyPayload to Session: ${session.id}")
+        printWebSocketConfig("WebsocketServer: Sending ReadyPayload to Session: ${session.id}")
         session.sendMessage(TextMessage(readyPayLoad.toString()))
-        println("WebsocketServer: Sent ReadyPayload to Session: ${session.id}")
-        println("WebsocketServer: Sending GuildCreatePayloadList to Session: ${session.id}")
+        printWebSocketConfig("WebsocketServer: Sent ReadyPayload to Session: ${session.id}")
+        printWebSocketConfig("WebsocketServer: Sending GuildCreatePayloadList to Session: ${session.id}")
         for (guildCreatePayLoad in guildCreatePayLoadList)
         {
             session.sendMessage(TextMessage(guildCreatePayLoad.toString()))
         }
-        println("WebsocketServer: Sent GuildCreatePayloadList to Session: ${session.id}")
+        printWebSocketConfig("WebsocketServer: Sent GuildCreatePayloadList to Session: ${session.id}")
     }
 }
 fun sendHeartBeatAck(session: WebSocketSession)

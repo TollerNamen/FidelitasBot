@@ -4,10 +4,10 @@ import okhttp3.*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.tollernamen.fidelitas.discordGateway
-import org.tollernamen.fidelitas.token
+import org.tollernamen.fidelitas.appconfig.printDiscordGatewayConfig
+import org.tollernamen.fidelitas.appconfig.token
 import org.tollernamen.fidelitas.websocketserver.chatHandler
 import java.util.*
-import kotlin.system.exitProcess
 
 val gson = Gson()
 
@@ -28,12 +28,12 @@ val listener = object : WebSocketListener()
 {
     override fun onOpen(webSocket: WebSocket, response: Response)
     {
-        println("Connected to Discord Gateway")
+        printDiscordGatewayConfig("Connected to Discord Gateway")
         connectionExists = true
     }
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String)
     {
-        println("Closing connection: $reason")
+        printDiscordGatewayConfig("Closing connection: $reason")
         connectionExists = false
         if (code == 4000
             || code == 4001
@@ -54,12 +54,10 @@ val listener = object : WebSocketListener()
     }
     override fun onMessage(webSocket: WebSocket, text: String)
     {
-        println("Received message: $text")
         val jsonObject = gson.fromJson(text, JsonObject::class.java)
 
         when (val opcode = Opcode.fromCode(jsonObject["op"].asInt))
         {
-            // Handle the received Opcode
             Opcode.DISPATCH -> handleDispatch(jsonObject)
             Opcode.HEARTBEAT -> handleHeartbeat(jsonObject)
             Opcode.HELLO -> handleHello(jsonObject)
@@ -77,7 +75,7 @@ val listener = object : WebSocketListener()
                     startNewSession()
                 }
             }
-            else -> println("Unhandled opcode: $opcode")
+            else -> printDiscordGatewayConfig("Unhandled opcode: $opcode")
         }
     }
 }
@@ -128,13 +126,13 @@ fun handleDispatch(jsonObject: JsonObject)
 }
 fun handleHeartbeatAck(jsonObject: JsonObject)
 {
-    println("Received HEARTBEAT_ACK: $jsonObject")
+    printDiscordGatewayConfig("Received HEARTBEAT_ACK: $jsonObject")
     heartbeatAckReceived = true
 }
 fun handleHello(jsonObject: JsonObject)
 {
     val heartbeatInterval = jsonObject["d"].asJsonObject["heartbeat_interval"].asInt
-    println("Received HELLO with heartbeat interval: $heartbeatInterval")
+    printDiscordGatewayConfig("Received HELLO with heartbeat interval: $heartbeatInterval")
 
     /*
     Intents and their corresponding values:
@@ -193,7 +191,7 @@ var lastSequenceNumber: Int? = null
 fun handleHeartbeat(jsonObject: JsonObject)
 {
     lastSequenceNumber = jsonObject["s"].asInt
-    println("Received HEARTBEAT with sequence number: $lastSequenceNumber")
+    printDiscordGatewayConfig("Received HEARTBEAT with sequence number: $lastSequenceNumber")
     sendHeartbeat()
 }
 fun startHeartbeat(interval: Int)
@@ -206,12 +204,11 @@ fun startHeartbeat(interval: Int)
         {
             if (!connectionExists)
             {
-                exitProcess(0)
+                cancel()
             }
             sendHeartbeat()
             heartbeatAckReceived = false
             checkHeartBeatAckReceived(interval)
-
         }
     }, interval.toLong(), interval.toLong())
 }
@@ -222,7 +219,7 @@ fun sendHeartbeat()
         add("d", if (lastSequenceNumber != null) gson.toJsonTree(lastSequenceNumber) else null)
     }
     discordGateway.sendMessage(heartbeatPayload.toString())
-    println("Sent HEARTBEAT with sequence number: $lastSequenceNumber")
+    printDiscordGatewayConfig("Sent HEARTBEAT with sequence number: $lastSequenceNumber")
 }
 fun checkHeartBeatAckReceived(interval: Int)
 {
@@ -234,13 +231,13 @@ fun checkHeartBeatAckReceived(interval: Int)
         {
             if (!heartbeatAckReceived)
             {
-                println("Missing Heartbeat, reconnecting...")
+                printDiscordGatewayConfig("Missing Heartbeat, reconnecting...")
                 scheduleReconnect()
             }
         }
     }, heartbeatCheckInterval)
 }
-data class DiscordGateway (var gatewayUrl: String, val listener: WebSocketListener)
+data class DiscordGateway (var gatewayUrl: String)
 {
     private val client = OkHttpClient()
     private lateinit var discordWebSocket: WebSocket
@@ -253,7 +250,7 @@ data class DiscordGateway (var gatewayUrl: String, val listener: WebSocketListen
     fun close()
     {
         discordWebSocket.close(1000, "Closing connection")
-        println("Connection closed")
+        printDiscordGatewayConfig("Connection closed")
     }
     fun sendMessage(json: String)
     {
@@ -292,23 +289,24 @@ fun scheduleReconnect()
     var delayMilliseconds = 2000L
     val maxDelayMilliseconds = 64000L
     val timer = Timer()
+    val task = object : TimerTask()
+    {
+        override fun run()
+        {
+            startNewSession()
+            printDiscordGatewayConfig("Reconnecting in ${delayMilliseconds / 1000}s")
+        }
+    }
     while (!connectionExists)
     {
-        timer.schedule(object : TimerTask()
-        {
-            override fun run()
-            {
-                startNewSession()
-                println("Reconnecting in ${delayMilliseconds}s")
-                exitProcess(0)
-            }
-        }, delayMilliseconds)
+        timer.schedule(task, delayMilliseconds)
         delayMilliseconds *= 2
         if (delayMilliseconds >= maxDelayMilliseconds)
         {
             delayMilliseconds = maxDelayMilliseconds
         }
     }
+    task.cancel()
 }
 fun sendJsonToDiscord(jsonString: String)
 {

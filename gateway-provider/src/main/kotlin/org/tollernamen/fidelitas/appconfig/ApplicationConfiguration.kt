@@ -1,12 +1,21 @@
-package org.tollernamen.fidelitas
+package org.tollernamen.fidelitas.appconfig
 
-import org.tollernamen.fidelitas.connectToDiscord.Opcode
 import java.io.File
 
 val tokenFile = File("/home/admindavid/IdeaProjects/Token/FidelitasToken.txt")
 val token = tokenFile.readText().trim()
+val defaultWebSocketHandlerTextColor = AnsiColor.RED
+val defaultDiscordGatewayTextColor = AnsiColor.BLUE
+val resetTextColor = AnsiColor.RESET.code
 
-enum class AnsiColor(val code: String) {
+fun printColorized(color: AnsiColor, text: String)
+{
+    println(color.code + text + resetTextColor)
+}
+fun printWebSocketConfig(text: String) = printColorized(defaultWebSocketHandlerTextColor, text)
+fun printDiscordGatewayConfig(text: String) = printColorized(defaultDiscordGatewayTextColor, text)
+enum class AnsiColor(val code: String)
+{
     RESET("\u001B[0m"),
     BLACK("\u001B[30m"),
     RED("\u001B[31m"),
@@ -39,7 +48,7 @@ enum class AnsiColor(val code: String) {
     BG_BRIGHT_BLUE("\u001B[44;1m"),
     BG_BRIGHT_MAGENTA("\u001B[45;1m"),
     BG_BRIGHT_CYAN("\u001B[46;1m"),
-    BG_BRIGHT_WHITE("\u001B[47;1m")
+    BG_BRIGHT_WHITE("\u001B[47;1m");
 
     companion object
     {
