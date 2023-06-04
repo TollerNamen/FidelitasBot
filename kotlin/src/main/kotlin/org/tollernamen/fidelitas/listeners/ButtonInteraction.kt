@@ -13,13 +13,18 @@ class ButtonInteraction : ListenerAdapter()
         {
             event.deferReply().queue()
             event.guild?.let { addSlashCmds(it.id, true, event) }
+
             val pressedButton = event.button
             val disabledButton = pressedButton.withDisabled(true)
-            val row = event.message.actionRows[0]
-            val buttons = row.buttons.toMutableList()
+
+            val buttons = event.message.actionRows[0].buttons.toMutableList()
+
             val buttonIndex = buttons.indexOf(pressedButton)
+
             buttons[buttonIndex] = disabledButton
+
             val newRow = ActionRow.of(buttons)
+
             event.message.editMessageComponents(newRow).queue()
         }
     }

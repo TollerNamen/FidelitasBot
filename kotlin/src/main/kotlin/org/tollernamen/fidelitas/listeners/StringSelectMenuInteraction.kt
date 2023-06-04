@@ -15,7 +15,6 @@ class StringSelectMenuInteraction : ListenerAdapter()
         if (event.selectMenu.id == "commandBrowser")
         {
             event.deferEdit().queue()
-            println("stringMenu Int ack")
 
             val newEmbed = EmbedBuilder().setColor(defaultEmbedColor)
 
@@ -31,7 +30,6 @@ class StringSelectMenuInteraction : ListenerAdapter()
                     }
                 }
                 "help_about" -> {
-                    println("about chosen")
                     val name = event.jda.selfUser.name
                     newEmbed.setTitle("Help - About")
                         .setDescription(
@@ -59,7 +57,10 @@ fun description(commandList: List<CommandData>, event: StringSelectInteractionEv
     event.guild?.retrieveCommands()?.queue({ commands ->
         if (commands.isEmpty())
         {
-            callback("There are no slash commands available in this guild. To add commands, send a message mentioning ${event.jda.selfUser.asTag} and saying \"setup\" (not case sensitive)")
+            callback("""
+                There are no slash commands available in this guild.
+                To add commands, send a message mentioning ${event.jda.selfUser.asTag} and saying \"setup\" (not case sensitive)
+                """.trimIndent())
         }
         else
         {
@@ -73,7 +74,7 @@ fun description(commandList: List<CommandData>, event: StringSelectInteractionEv
                 }
             for (command in allowedCommands)
             {
-                description.append("${command.asMention}\n ${command.description} \n")
+                description.append("${command.asMention}\n${command.description} \n")
             }
             callback(description.toString())
         }
