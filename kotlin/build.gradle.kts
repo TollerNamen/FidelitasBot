@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("net.dv8tion:JDA:5.0.0-beta.6")
+    implementation("net.dv8tion:JDA:5.0.0-beta.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
     implementation("com.github.minndevelopment:jda-ktx:0.10.0-beta.1")
     //implementation("com.squareup.okhttp3:okhttp:4.9.3")
@@ -28,5 +28,5 @@ kotlin {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("org.tollernamen.fidelitas.MainKt")
 }
