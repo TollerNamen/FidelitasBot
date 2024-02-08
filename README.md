@@ -8,3 +8,5 @@ Links:
  • [FidelitasBot Community](https://discord.gg/EcbnGTSMZZ)
  
  • [Add FidelitasBot to your Server](https://discord.com/api/oauth2/authorize?client_id=1000390823273304066&permissions=8&scope=bot)
+
+this repo will be archived, since i have different planes and approaches for a new bot.
